@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Status } from '../types/Status';
+
+export enum Status {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 export interface FilterState {
   query: string;
@@ -8,7 +13,7 @@ export interface FilterState {
 
 const initialState: FilterState = {
   query: '',
-  status: 'all',
+  status: Status.All,
 };
 
 export const filterSlice = createSlice({
@@ -17,11 +22,11 @@ export const filterSlice = createSlice({
   reducers: {
     setQuery: (state, action: PayloadAction<string>) => ({
       ...state,
-      query: action.payload
+      query: action.payload,
     }),
     setStatus: (state, action: PayloadAction<Status>) => ({
       ...state,
-      status: action.payload
+      status: action.payload,
     }),
   },
 });
