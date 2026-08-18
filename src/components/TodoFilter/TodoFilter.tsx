@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setQuery, setStatus } from '../../features/filter';
-import { Status } from '../../types/Status';
+import { setQuery, setStatus, type Status } from '../../features/filter';
 
 export const TodoFilter: React.FC = () => {
   const dispatch = useAppDispatch();

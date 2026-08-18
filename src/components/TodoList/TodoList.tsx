@@ -1,12 +1,11 @@
 /* eslint-disable */
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Status } from '../../types/Status';
 import { clearCurrentTodo, setCurrentTodo } from '../../features/currentTodo';
 import { Todo } from '../../types/Todo';
 
 export const TodoList: React.FC = () => {
-  const dispacth = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const todos = useAppSelector(state => state.todos);
   const { query, status } = useAppSelector(state => state.filter);
@@ -29,9 +28,9 @@ export const TodoList: React.FC = () => {
 
   const handleSelectTodo = (todo: Todo) => {
     if(currentTodo?.id === todo.id) {
-      dispacth(clearCurrentTodo());
+      dispatch(clearCurrentTodo());
     } else {
-      dispacth(setCurrentTodo(todo));
+      dispatch(setCurrentTodo(todo));
     }
   };
 

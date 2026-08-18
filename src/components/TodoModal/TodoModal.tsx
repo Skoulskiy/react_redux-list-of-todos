@@ -1,32 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Loader } from '../Loader';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { User } from '../../types/User';
-import { getUser } from '../../api';
 import { clearCurrentTodo } from '../../features/currentTodo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
+import { Loader } from '../Loader';
 
 export const TodoModal: React.FC = () => {
   const dispatch = useAppDispatch();
   const todo = useAppSelector(state => state.currentTodo);
 
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!todo) {
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+
+    getUser(todo.userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
+  }, [todo]);
+
+  if (!todo) {
+    return null;
+  }
 
   const handleClose = () => {
     dispatch(clearCurrentTodo());
   };
-
-  useEffect(() => {
-    setLoading(true);
-
-    if (!todo) {
-      return;
-    }
-
-    getUser(todo.userId)
-      .then(setUser)
-      .finally(() => setLoading(false));
-  }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -56,7 +62,7 @@ export const TodoModal: React.FC = () => {
         </header>
 
         <div className="modal-card-body">
-          {loading ? (
+          {isLoading ? (
             <Loader />
           ) : (
             <>
@@ -71,7 +77,11 @@ export const TodoModal: React.FC = () => {
                   <strong className="has-text-danger">Planned</strong>
                 )}
                 {' by '}
-                {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
+                {user && (
+                  <a href={`mailto:${user.email}`}>
+                    {user.name}
+                  </a>
+                )}
               </p>
             </>
           )}
